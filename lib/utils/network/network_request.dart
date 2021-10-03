@@ -21,17 +21,17 @@ class NetworkRequest {
   this.url,
   this.method, {
     this.data,
-    this.dataType,
+    this.dataType = RequestDataType.json,
     this.queryParams,
     this.headers,
     this.isAuthorized = false
   });
 
-  String? url;
+  final String url;
+  final RequestMethod method;
   dynamic data;
-  RequestMethod? method;
-  RequestDataType? dataType;
+  RequestDataType dataType;
   Map<String, String>? queryParams;
   Map<String, String>? headers;
-  bool? isAuthorized;
+  bool isAuthorized;
 }
