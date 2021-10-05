@@ -1,1 +1,1 @@
-const String baseUrl = '';
+const String baseUrl = 'https://v2.jokeapi.dev/';

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mvi_starter/data/remote/test/joke_entity.dart';
 import 'package:flutter_mvi_starter/di/modules/app_module.dart';
+import 'package:flutter_mvi_starter/utils/network/api_response.dart';
+import 'package:flutter_mvi_starter/utils/network/network_manager.dart';
+import 'package:flutter_mvi_starter/utils/network/network_request.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 
 void main() {
@@ -34,12 +38,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  JokeEntity? joke;
+  bool isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+    getJoke();
   }
 
   @override
@@ -49,24 +53,44 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
+        child: isLoading? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'Please wait, we will tell you another joke..... ',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            CircularProgressIndicator(),
+          ],
+        ): Column (
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(joke?.setup??''),
+            Text(joke?.delivery??'')
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          getJoke();
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void getJoke() async {
+    setState(() {
+      isLoading = true;
+    });
+    final NetworkManager networkManager = Injector().get<NetworkManager>();
+    print('network manager: ${networkManager.hashCode}');
+    ApiResponse jokeResponse = await networkManager.perform(NetworkRequest('joke/Any', RequestMethod.get));
+    if(jokeResponse.status == Status.OK){
+      setState(() {
+        isLoading = false;
+        joke = JokeEntity().fromJson(jokeResponse.data);
+      });
+    }
   }
 }
