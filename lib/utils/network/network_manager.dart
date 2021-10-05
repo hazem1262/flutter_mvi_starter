@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_mvi_starter/utils/network/api_response.dart';
+import 'package:flutter_mvi_starter/utils/network/application_error.dart';
 import 'package:flutter_mvi_starter/utils/network/const.dart';
-import 'package:flutter_mvi_starter/utils/network/network_exceptions.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'network_request.dart';
@@ -47,13 +48,17 @@ class NetworkManager {
     );
   }
 
-  Future<dynamic> perform(NetworkRequest request) async {
-    final Response<dynamic> response = await _dio.request<dynamic>(
-      request.url,
-      data: request.data,
-      options: _getOptions(request),
-    );
-    return response.data;
+  Future<ApiResponse> perform(NetworkRequest request) async {
+    try{
+      final Response<dynamic> response = await _dio.request<dynamic>(
+        request.url,
+        data: request.data,
+        options: _getOptions(request),
+      );
+      return ApiResponse.success(response.data);
+    } catch(e){
+      return ApiResponse.failed(getApplicationErrorFromDioError(e as DioError));
+    }
   }
 
   Options _getOptions(NetworkRequest request) {
@@ -61,18 +66,26 @@ class NetworkManager {
       headers: request.headers,
       method: request.method.name,
       extra: <String, dynamic>{'isAuthorized': request.isAuthorized}, // read this later in interceptor to send token if needed
-      validateStatus: isValidStatusCode,
     );
   }
 
-  bool isValidStatusCode(int? statusCode) {
-    if (statusCode == 401) {
-      throw UnAuthorizedException();
-    } else if (statusCode == 403) {
-      throw ForbiddenException();
-    } else {
-      return true;
+  ApplicationError getApplicationErrorFromDioError(DioError dioError) {
+    ErrorType errorType;
+    String errorMsg = "Network error";
+    dynamic extra;
+    if(dioError.response?.data != null && dioError.response?.data is Map){
+      errorMsg = dioError.response?.data["message"]??"Network error";
+      extra = dioError.response?.data["errors"];
     }
+    if(dioError.response?.statusCode == 401){
+      errorType = Unauthorized();
+    } else if(dioError.response?.statusCode == 404){
+      errorType = ResourceNotFound();
+    } else{
+      errorType = UnExpected();
+      errorMsg = "un expected error";
+    }
+    return ApplicationError( type: errorType, errorMsg: errorMsg, extra: extra);
   }
 
 }
