@@ -4,8 +4,8 @@ class JokeEntity with JsonConvert<JokeEntity> {
 	late bool error;
 	late String category;
 	late String type;
-	late String setup;
-	late String delivery;
+	String? setup;
+	String? delivery;
 	late JokeFlags flags;
 	late bool safe;
 	late int id;

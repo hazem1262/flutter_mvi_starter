@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mvi_starter/app_observer.dart';
+import 'package:flutter_mvi_starter/bloc/joke_bloc.dart';
+import 'package:flutter_mvi_starter/bloc/joke_event.dart';
+import 'package:flutter_mvi_starter/bloc/joke_state.dart';
 import 'package:flutter_mvi_starter/data/remote/test/joke_entity.dart';
 import 'package:flutter_mvi_starter/di/modules/app_module.dart';
-import 'package:flutter_mvi_starter/utils/network/api_response.dart';
-import 'package:flutter_mvi_starter/utils/network/network_manager.dart';
-import 'package:flutter_mvi_starter/utils/network/network_request.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   AppModule().initialise(Injector()); // initialize simple dependency injector
+  Bloc.observer = AppObserver();
   runApp(const MyApp());
 }
 
@@ -38,59 +41,70 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  JokeEntity? joke;
-  bool isLoading = false;
   @override
   void initState() {
     super.initState();
-    getJoke();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: isLoading? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Please wait, we will tell you another joke..... ',
+    return BlocProvider<JokeBloc>(
+      create: (ctx) => JokeBloc()..add(LoadJoke()),
+      child: BlocBuilder<JokeBloc, JokeState>(
+        builder: (context, state){
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
             ),
-            CircularProgressIndicator(),
-          ],
-        ): Column (
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(joke?.setup??''),
-            Text(joke?.delivery??'')
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          getJoke();
+            body: Center(
+              child: (state is LoadingJoke) ? CustomLoadingJoke():
+              (state is LoadedJokeError)? Text(state.error):
+              JokeWidget(joke: (state as LoadedJoke).joke),
+            ),
+            floatingActionButton: (state is LoadingJoke) ? Container():FloatingActionButton(
+              onPressed: () {
+                BlocProvider.of<JokeBloc>(context).add(LoadJoke());
+              },
+              tooltip: 'Increment',
+              child: const Icon(Icons.add),
+            ) , // This trailing comma makes auto-formatting nicer for build methods.
+          );
         },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
+}
 
-  void getJoke() async {
-    setState(() {
-      isLoading = true;
-    });
-    final NetworkManager networkManager = Injector().get<NetworkManager>();
-    print('network manager: ${networkManager.hashCode}');
-    ApiResponse jokeResponse = await networkManager.perform(NetworkRequest('joke/Any', RequestMethod.get));
-    if(jokeResponse.status == Status.OK){
-      setState(() {
-        isLoading = false;
-        joke = JokeEntity().fromJson(jokeResponse.data);
-      });
-    }
+
+class CustomLoadingJoke extends StatelessWidget {
+  const CustomLoadingJoke({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        const Text(
+          'Please wait, we will tell you another joke..... ',
+        ),
+        CircularProgressIndicator(),
+      ],
+    );
   }
 }
+
+class JokeWidget extends StatelessWidget {
+  const JokeWidget({Key? key, required this.joke}) : super(key: key);
+  final JokeEntity joke;
+  @override
+  Widget build(BuildContext context) {
+    return Column (
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(joke.setup??''),
+        Text(joke.delivery??'')
+      ],
+    );
+  }
+}
+
