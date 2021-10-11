@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_mvi_starter/bloc/joke_event.dart';
-import 'package:flutter_mvi_starter/bloc/joke_state.dart';
 import 'package:flutter_mvi_starter/data/remote/test/joke_entity.dart';
+import 'package:flutter_mvi_starter/presentation/test/joke/bloc/joke_event.dart';
+import 'package:flutter_mvi_starter/presentation/test/joke/bloc/joke_state.dart';
 import 'package:flutter_mvi_starter/utils/network/api_response.dart';
 import 'package:flutter_mvi_starter/utils/network/network_manager.dart';
 import 'package:flutter_mvi_starter/utils/network/network_request.dart';
