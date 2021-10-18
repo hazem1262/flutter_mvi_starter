@@ -1,4 +1,5 @@
 import 'dart:ui';
 
-const List<Locale> localeList = [Locale('en'), Locale('ar')];
-const Locale fallbackLocale = Locale('en');
+const Locale arabicLocale = Locale('ar');
+const Locale englishLocale = Locale('en');
+const List<Locale> localeList = [englishLocale, arabicLocale];

@@ -17,7 +17,8 @@ void main() async {
     EasyLocalization(
       path: 'assets/translations',
       supportedLocales: localeList,
-      fallbackLocale: fallbackLocale,
+      fallbackLocale: englishLocale,
+      useOnlyLangCode: true,
       child: const MyApp(),
     )
   );
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
