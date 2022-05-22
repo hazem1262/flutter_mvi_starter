@@ -1,0 +1,3 @@
+- State: Enum, copyWith
+- theming
+- UI error handling
