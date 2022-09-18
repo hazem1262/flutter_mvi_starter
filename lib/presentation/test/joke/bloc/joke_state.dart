@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_mvi_starter/data/remote/test/joke_entity.dart';
+import 'package:flutter_mvi_starter/data/remote/test/models/joke_entity.dart';
 
 abstract class JokeState extends Equatable{
   const JokeState();

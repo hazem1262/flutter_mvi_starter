@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvi_starter/utils/style/theme.dart';
+import 'package:flutter_mvi_starter/utils/style/colors.dart';
 import 'package:flutter_mvi_starter/utils/widgets/alerts/base_alert.dart';
 import 'package:flutter_mvi_starter/utils/widgets/app_button.dart';
 import 'package:flutter_mvi_starter/utils/extensions/extensions.dart';
@@ -25,7 +25,7 @@ class NormalAlert extends StatelessWidget {
       body: body,
       buttonsWidget: AppButton(
         title: buttonTitle,
-        color: cornflowerBlue,
+        color: AppColors.cornflowerBlue,
         action: () {
           onPressed?.call();
           context.navigator.pop(true);

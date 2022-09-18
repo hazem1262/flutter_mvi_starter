@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvi_starter/utils/style/theme.dart';
+import 'package:flutter_mvi_starter/utils/style/colors.dart';
 import 'package:flutter_mvi_starter/utils/widgets/loading_widget.dart';
 
 class AppButton extends StatelessWidget {
@@ -10,7 +10,7 @@ class AppButton extends StatelessWidget {
     this.height = 50,
     this.enabled = true,
     this.isLoading = false,
-    this.color = cornflowerBlue,
+    this.color = AppColors.cornflowerBlue,
     this.disabledColor,
     this.borderRadius = 10,
     this.borderColor = Colors.transparent,
@@ -53,7 +53,7 @@ class AppButton extends StatelessWidget {
               ),
               primary: enabled
                   ? color
-                  : disabledColor ?? cornflowerBlue.withOpacity(0.3),
+                  : disabledColor ?? AppColors.cornflowerBlue.withOpacity(0.3),
             ),
             onPressed: () {
               if (!isLoading && enabled && action != null) {

@@ -5,8 +5,7 @@ class ApiResponse {
   late Status status;
   ApplicationError? error;
 
-  ApiResponse.success(data) {
-    this.data = data;
+  ApiResponse.success(this.data) {
     status = Status.OK;
   }
 

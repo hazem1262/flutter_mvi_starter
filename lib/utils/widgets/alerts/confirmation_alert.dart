@@ -1,6 +1,6 @@
 import 'package:flutter_mvi_starter/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mvi_starter/utils/style/theme.dart';
+import 'package:flutter_mvi_starter/utils/style/colors.dart';
 import 'package:flutter_mvi_starter/utils/widgets/alerts/base_alert.dart';
 import 'package:flutter_mvi_starter/utils/widgets/app_button.dart';
 
@@ -32,7 +32,7 @@ class ConfirmationAlert extends StatelessWidget {
           Expanded(
             child: AppButton(
               title: confirmButtonTitle,
-              color: cornflowerBlue,
+              color: AppColors.cornflowerBlue,
               action: () {
                 context.navigator.pop(true);
                 onConfirm?.call();
@@ -44,8 +44,8 @@ class ConfirmationAlert extends StatelessWidget {
             child: AppButton(
               title: cancelButtonTitle,
               color: Colors.white,
-              borderColor: cornflowerBlue,
-              textColor: cornflowerBlue,
+              borderColor: AppColors.cornflowerBlue,
+              textColor: AppColors.cornflowerBlue,
               action: () {
                 context.navigator.pop(false);
                 onCancel?.call();

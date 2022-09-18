@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvi_starter/data/remote/test/joke_entity.dart';
+import 'package:flutter_mvi_starter/data/remote/test/models/joke_entity.dart';
 import 'package:flutter_mvi_starter/presentation/test/joke_details/joke_details_screen.dart';
 
 class JokeWidget extends StatelessWidget {

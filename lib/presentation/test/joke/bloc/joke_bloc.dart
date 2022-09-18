@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_mvi_starter/data/remote/test/joke_entity.dart';
+import 'package:flutter_mvi_starter/data/remote/test/models/joke_entity.dart';
 import 'package:flutter_mvi_starter/presentation/test/joke/bloc/joke_event.dart';
 import 'package:flutter_mvi_starter/presentation/test/joke/bloc/joke_state.dart';
 import 'package:flutter_mvi_starter/utils/network/api_response.dart';
@@ -23,7 +23,7 @@ class JokeBloc extends Bloc<JokeEvent, JokeState>{
     if(event is LoadJoke) {
       ApiResponse jokeResponse = await loadJoke();
       if(jokeResponse.status == Status.OK){
-        JokeEntity jokeEntity = JokeEntity().fromJson(jokeResponse.data);
+        JokeEntity jokeEntity = JokeEntity.fromJson(jokeResponse.data);
         yield LoadedJoke(jokeEntity);
       } else{
         yield LoadedJokeError(jokeResponse.error?.errorMsg??'');

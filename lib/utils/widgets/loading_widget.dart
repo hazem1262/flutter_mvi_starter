@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvi_starter/utils/style/theme.dart';
+import 'package:flutter_mvi_starter/utils/style/colors.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({
     Key? key,
-    this.color = cornflowerBlue,
+    this.color = AppColors.cornflowerBlue,
   }) : super(key: key);
 
   final Color color;

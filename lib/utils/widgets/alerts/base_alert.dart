@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvi_starter/utils/style/theme.dart';
+import 'package:flutter_mvi_starter/utils/style/colors.dart';
 
 class BaseAlert extends StatelessWidget {
   const BaseAlert({
@@ -37,7 +37,7 @@ class BaseAlert extends StatelessWidget {
                 title,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  color: cornflowerBlue,
+                  color: AppColors.cornflowerBlue,
                   fontWeight: FontWeight.w500,
                   fontSize: 22,
                 ),
@@ -49,7 +49,7 @@ class BaseAlert extends StatelessWidget {
                   body,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: cornflowerBlue,
+                    color: AppColors.cornflowerBlue,
                     fontWeight: FontWeight.w500,
                     fontSize: 18,
                   ),
